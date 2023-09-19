@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management</title>
+</head>
+<body>
+    <h1>Client Management</h1>
+
+    <h2>Clients</h2>
+    <ul id="client-list"></ul>
+    <button onclick="fetchClients()">Fetch Clients</button>
+
+    <h2>Services</h2>
+    <ul id="service-list"></ul>
+    <button onclick="fetchServices()">Fetch Services</button>
+
+    <script>
+        async function fetchClients() {
+            const response = await fetch('/clients');
+            const data = await response.json();
+            const clientList = document.getElementById('client-list');
+            clientList.innerHTML = '';
+            data.forEach(client => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Name: ${client.name}, Email: ${client.email}`;
+                clientList.appendChild(listItem);
+            });
+        }
+
+        async function fetchServices() {
+            const response = await fetch('/services');
+            const data = await response.json();
+            const serviceList = document.getElementById('service-list');
+            serviceList.innerHTML = '';
+            data.forEach(service => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Name: ${service.name}, Description: ${service.description}`;
+                serviceList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>

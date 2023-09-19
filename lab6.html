@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Добавление теста</title>
+  <style>
+    body {
+      background-color: wheat;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Добавление теста</h1>
+
+  <form id="testForm" onsubmit="saveTest(event)">
+    <label for="testName">Название теста:</label>
+    <input type="text" id="testName" name="testName" required>
+
+    <button type="button" onclick="addQuestion()">Добавить вопрос</button>
+
+    <button type="submit">Сохранить</button>
+  </form>
+
+  <script>
+    let questionCounter = 0;
+
+    function addQuestion() {
+      questionCounter++;
+
+      const form = document.getElementById("testForm");
+      const questionDiv = document.createElement("div");
+      const questionLabel = document.createElement("label");
+      const questionInput = document.createElement("input");
+      const answersDiv = document.createElement("div");
+
+      questionDiv.id = `question${questionCounter}`;
+      questionLabel.textContent = `Вопрос ${questionCounter}:`;
+      questionInput.type = "text";
+      questionInput.name = `question${questionCounter}`;
+
+      for (let i = 1; i <= 2; i++) {
+        const answerLabel = document.createElement("label");
+        const answerInput = document.createElement("input");
+        const isCorrectCheckbox = document.createElement("input");
+
+        answerLabel.textContent = `Вариант ответа ${i}:`;
+        answerInput.type = "text";
+        answerInput.name = `answer${questionCounter}_${i}`;
+        isCorrectCheckbox.type = "checkbox";
+        isCorrectCheckbox.name = `correctAnswer${questionCounter}`;
+        isCorrectCheckbox.value = i;
+
+        answersDiv.appendChild(answerLabel);
+        answersDiv.appendChild(answerInput);
+        answersDiv.appendChild(isCorrectCheckbox);
+        answersDiv.appendChild(document.createElement("br"));
+      }
+
+      questionDiv.appendChild(questionLabel);
+      questionDiv.appendChild(questionInput);
+      questionDiv.appendChild(answersDiv);
+
+      form.appendChild(questionDiv);
+    }
+
+    function saveTest(event) {
+      event.preventDefault();
+      const form = document.getElementById("testForm");
+
+      const testData = {
+        testName: form.testName.value,
+        questions: [],
+      };
+
+      for (let i = 1; i <= questionCounter; i++) {
+        const questionData = {
+          questionText: form[`question${i}`].value,
+          answers: [],
+        };
+
+        for (let j = 1; j <= 2; j++) {
+          const answerText = form[`answer${i}_${j}`].value;
+          const isCorrect = form[`correctAnswer${i}`].value === `${j}`;
+          questionData.answers.push({ answerText, isCorrect });
+        }
+
+        testData.questions.push(questionData);
+      }
+      console.log(testData);
+    }
+  </script>
+</body>
+</html>
